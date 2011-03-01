@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>com.jgoodies</groupId>
 			<artifactId>looks</artifactId>
-			<version>2.2.2</version>
+			<version>${looks-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jdesktop.bsaf</groupId>
@@ -148,6 +148,7 @@
 	<properties>
 		<bsaf-version>1.9</bsaf-version>
 		<forms-version>1.2.1</forms-version>
+		<looks-version>2.2.2</looks-version>
 		<commons-lang-version>2.4</commons-lang-version>
 		<cardme-version>0.2.6</cardme-version>
 		<freemarker-version>2.3.14</freemarker-version>
