@@ -71,17 +71,17 @@
 		<dependency>
 			<groupId>com.google.gdata</groupId>
 			<artifactId>gdata-core-1.0</artifactId>
-			<version>1.36.0</version>
+			<version>${gdata-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.gdata</groupId>
 			<artifactId>gdata-contacts-3.0</artifactId>
-			<version>1.36.0</version>
+			<version>${gdata-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.gdata</groupId>
 			<artifactId>gdata-client-1.0</artifactId>
-			<version>1.36.0</version>
+			<version>${gdata-version}</version>
 		</dependency>
 	</dependencies>
 
@@ -153,6 +153,7 @@
 		<cardme-version>0.2.6</cardme-version>
 		<freemarker-version>2.3.14</freemarker-version>
 		<itext-version>5.0.4</itext-version>
+		<gdata-version>1.36.0</gdata-version>
 	</properties>
 
 </project>
