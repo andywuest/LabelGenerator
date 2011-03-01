@@ -158,8 +158,8 @@ public class AppLogic implements MainDialogConstants {
 			final ButtonLabel button = new ButtonLabel(i);
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					AddressDialogController dialogController = new AddressDialogController(view.getFrame(), button,
-							applicationConfiguration);
+					final AddressDialogController dialogController = new AddressDialogController(view.getFrame(),
+							button, applicationConfiguration);
 					dialogController.showDialog();
 				}
 			});
