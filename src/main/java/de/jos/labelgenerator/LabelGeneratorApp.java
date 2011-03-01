@@ -14,6 +14,7 @@ import org.jdesktop.application.LocalStorage;
 import org.jdesktop.application.SingleFrameApplication;
 
 import de.jos.labelgenerator.configuration.ApplicationConfiguration;
+import de.jos.labelgenerator.dialog.preferences.PreferencesDialogController;
 import de.jos.labelgenerator.formatter.CustomFormatter;
 
 public class LabelGeneratorApp extends SingleFrameApplication {
@@ -50,7 +51,6 @@ public class LabelGeneratorApp extends SingleFrameApplication {
 		for (String tmpFileName : fileNames) {
 			final File file = new File(Constants.FILE_DIRECTORY_TMP + Constants.SEPARATOR + tmpFileName);
 			logger.log(Level.INFO, "Deleting temporary file {0}", file.getAbsoluteFile());
-			file.delete();
 		}
 	}
 
@@ -95,6 +95,12 @@ public class LabelGeneratorApp extends SingleFrameApplication {
 		loadConfiguration();
 
 		show(appView);
+	}
+
+	@org.jdesktop.application.Action
+	public void preferences() {
+		final PreferencesDialogController preferencesController = new PreferencesDialogController(appView.getFrame());
+		preferencesController.showDialog();
 	}
 
 	@Override
