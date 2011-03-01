@@ -21,10 +21,14 @@
 			<url>http://maven.itextpdf.com/</url>
 		</repository>
 		<repository>
-			<id>uni.konstanz</id>
+			<id>uni.konstanz_vcard</id>
 			<name>Uni Konstanz Repository for Maven</name>
 			<url>http://www.inf.uni-konstanz.de/dbis/basex/maven</url>
 			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>mandubian-mvn_google</id>
+			<url>http://mandubian-mvn.googlecode.com/svn/trunk/mandubian-mvn/repository</url>
 		</repository>
 	</repositories>
 
@@ -63,6 +67,21 @@
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itextpdf</artifactId>
 			<version>${itext-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gdata</groupId>
+			<artifactId>gdata-core-1.0</artifactId>
+			<version>1.36.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gdata</groupId>
+			<artifactId>gdata-contacts-3.0</artifactId>
+			<version>1.36.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gdata</groupId>
+			<artifactId>gdata-client-1.0</artifactId>
+			<version>1.36.0</version>
 		</dependency>
 	</dependencies>
 
