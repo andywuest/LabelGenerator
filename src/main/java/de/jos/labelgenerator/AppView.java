@@ -79,7 +79,7 @@ public class AppView extends FrameView {
 
 	private JMenuBar createMenuBar() {
 		menuBar = new JMenuBar();
-		final String[] fileMenuActionNames = { "---", "quit" };
+		final String[] fileMenuActionNames = { "preferences", "---", "quit" };
 		menuBar.add(createMenu("menu.file", fileMenuActionNames));
 		return menuBar;
 	}
@@ -93,8 +93,9 @@ public class AppView extends FrameView {
 	}
 
 	/**
-	 * Runs after the startup has completed and the GUI is up and ready. We show the first image here, rather than
-	 * initializing it at startup time, so loading the first image doesn't impede getting the GUI visible.
+	 * Runs after the startup has completed and the GUI is up and ready. We show
+	 * the first image here, rather than initializing it at startup time, so
+	 * loading the first image doesn't impede getting the GUI visible.
 	 */
 	protected void ready() {
 		System.out.println("ready !");
