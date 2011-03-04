@@ -23,6 +23,7 @@ import de.jos.labelgenerator.configuration.layoutProvider.impl.ClasspathLayoutPr
 import de.jos.labelgenerator.configuration.layoutProvider.impl.FilesystemLayoutProvider;
 import de.jos.labelgenerator.dialog.address.AddressDialogController;
 import de.jos.labelgenerator.dialog.main.MainDialogConstants;
+import de.jos.labelgenerator.dialog.preferences.PreferencesDialogController;
 import de.jos.labelgenerator.pdf.PDFGenerator;
 
 /**
@@ -65,6 +66,14 @@ public class AppLogic implements MainDialogConstants {
 		}
 
 	}
+	
+	@org.jdesktop.application.Action
+	public void preferences() {
+		System.out.println("pref in logic !");
+		final PreferencesDialogController preferencesController = new PreferencesDialogController(getView().getFrame(),
+				getApplicationConfiguration());
+		preferencesController.showDialog();
+	}	
 
 	public AppView getView() {
 		return view;

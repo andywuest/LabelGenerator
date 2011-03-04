@@ -15,7 +15,6 @@ import org.jdesktop.application.SingleFrameApplication;
 
 import de.jos.labelgenerator.configuration.ApplicationConfiguration;
 import de.jos.labelgenerator.configuration.Preferences;
-import de.jos.labelgenerator.dialog.preferences.PreferencesDialogController;
 import de.jos.labelgenerator.formatter.CustomFormatter;
 
 public class LabelGeneratorApp extends SingleFrameApplication {
@@ -101,12 +100,12 @@ public class LabelGeneratorApp extends SingleFrameApplication {
 		show(appView);
 	}
 
-	@org.jdesktop.application.Action
-	public void preferences() {
-		final PreferencesDialogController preferencesController = new PreferencesDialogController(appView.getFrame(),
-				appView.getLogic().getApplicationConfiguration());
-		preferencesController.showDialog();
-	}
+//	@org.jdesktop.application.Action
+//	public void preferences() {
+//		final PreferencesDialogController preferencesController = new PreferencesDialogController(appView.getFrame(),
+//				appView.getLogic().getApplicationConfiguration());
+//		preferencesController.showDialog();
+//	}
 
 	@Override
 	protected void ready() {
