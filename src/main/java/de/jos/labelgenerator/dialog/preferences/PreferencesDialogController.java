@@ -10,6 +10,7 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationContext;
 
 import de.jos.labelgenerator.LabelGeneratorApp;
+import de.jos.labelgenerator.configuration.ApplicationConfiguration;
 
 public class PreferencesDialogController {
 
@@ -17,18 +18,23 @@ public class PreferencesDialogController {
 
 	private final ApplicationContext applicationContext = Application.getInstance(LabelGeneratorApp.class).getContext();
 
-	public PreferencesDialogController(Frame parentFrame) {
+	private ApplicationConfiguration applicationConfiguration = null;
+
+	public PreferencesDialogController(final Frame parentFrame, final ApplicationConfiguration applicationConfiguration) {
+		this.applicationConfiguration = applicationConfiguration;
 
 		// ceate the dialog
 		dialog = new JDialog(parentFrame, "preferences");
 
 		// application configuration
-		final PreferencesDialogLogic logic = new PreferencesDialogLogic(dialog, null);
+		final PreferencesDialogLogic logic = new PreferencesDialogLogic(dialog, applicationConfiguration);
 
 		final PreferencesDialogPanel preferencesDialogPanel = new PreferencesDialogPanel(applicationContext
 				.getActionMap(logic));
 
 		logic.setPreferencesDialogPanel(preferencesDialogPanel);
+		logic.applyPreferencesToPanel();
+		
 
 		// define modal dialog
 		dialog.setModal(true);

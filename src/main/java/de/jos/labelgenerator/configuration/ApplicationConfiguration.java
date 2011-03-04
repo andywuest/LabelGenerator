@@ -6,8 +6,9 @@ public class ApplicationConfiguration {
 
 	private Layout lastLayout = null;
 
-	public ApplicationConfiguration() {
+	private Preferences preferences = null;
 
+	public ApplicationConfiguration() {
 	}
 
 	public Template getLastTemplate() {
@@ -24,6 +25,14 @@ public class ApplicationConfiguration {
 
 	public void setLastLayout(Layout lastLayout) {
 		this.lastLayout = lastLayout;
+	}
+
+	public Preferences getPreferences() {
+		return preferences;
+	}
+
+	public void setPreferences(Preferences preferences) {
+		this.preferences = preferences;
 	}
 
 }

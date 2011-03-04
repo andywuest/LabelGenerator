@@ -1,8 +1,10 @@
 package de.jos.labelgenerator.configuration.addressProvider;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,15 +28,48 @@ import com.google.gdata.util.ServiceException;
 
 public class GMailAddressProvider {
 
-	public static Map<String, String> getContactGroups(ContactsService contactService, String email)
-			throws MalformedURLException, IOException, ServiceException {
+	private static final Logger LOGGER = Logger.getLogger(GMailAddressProvider.class.getName());
+
+	private String email = null;
+
+	private String emailEncoded = null;
+
+	private String password = null;
+
+	private ContactsService contactsService = null;
+
+	public GMailAddressProvider(String email, String password) {
+		try {
+			this.emailEncoded = URLEncoder.encode(email, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// IGNORE
+		}
+		this.email = email;
+		this.password = password;
+		contactsService = new ContactsService("exampleCo-exampleApp-1");
+	}
+
+	public boolean isLoginSuccessful() {
+		boolean result = false;
+		try {
+			contactsService.setUserCredentials(email, password);
+			result = true;
+		} catch (AuthenticationException e) {
+			LOGGER.log(Level.SEVERE, "Login to GMail with email {0} failed with Exception {1}", new Object[] { email,
+					e.getMessage() });
+			result = false;
+		}
+		return result;
+	}
+
+	public Map<String, String> getContactGroups() throws MalformedURLException, IOException, ServiceException {
 		final Map<String, String> resultMap = new HashMap<String, String>();
 
-		final URL feedUrl = new URL(String.format("https://www.google.com/m8/feeds/groups/%s/full", email));
+		final URL feedUrl = new URL(String.format("https://www.google.com/m8/feeds/groups/%s/full", emailEncoded));
 		final Query query = new Query(feedUrl);
 		query.setMaxResults(999999);
 
-		final ContactGroupFeed resultFeed = (ContactGroupFeed) contactService.query(query, ContactGroupFeed.class);
+		final ContactGroupFeed resultFeed = (ContactGroupFeed) contactsService.query(query, ContactGroupFeed.class);
 		if (resultFeed != null) {
 			for (ContactGroupEntry tmpContactGroupEntry : resultFeed.getEntries()) {
 				final String name = tmpContactGroupEntry.getTitle().getPlainText();
@@ -95,7 +130,7 @@ public class GMailAddressProvider {
 		return result;
 	}
 
-	public static void main(String args[]) {
+	public static void maina(String args[]) {
 
 		// Configure the logging mechanisms.
 		Logger httpLogger = Logger.getLogger("com.google.gdata.client.http.HttpGDataRequest");
@@ -109,32 +144,37 @@ public class GMailAddressProvider {
 		xmlLogger.addHandler(logHandler);
 
 		ContactsService myService = new ContactsService("exampleCo-exampleApp-1");
+		// try {
+
+		String password = "";
+
 		try {
-
-			String password = "";
-			
 			myService.setUserCredentials("andreas.wuest.freelancer@googlemail.com", password);
-			try {
-				String email = "andreas.wuest.freelancer%40googlemail.com";
-				String group = "LabelGenerator";
-
-				Map<String, String> contactGroups = getContactGroups(myService, email);
-				System.out.println(contactGroups);
-
-				if (contactGroups.containsKey("LabelGenerator")) {
-					getContactsForGroup(myService, email, contactGroups.get(group));
-				}
-			} catch (ServiceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		} catch (AuthenticationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+//		try {
+//			String email = "andreas.wuest.freelancer%40googlemail.com";
+//			String group = "LabelGenerator";
+
+//			Map<String, String> contactGroups = getContactGroups(myService, email);
+//			System.out.println(contactGroups);
+//
+//			if (contactGroups.containsKey("LabelGenerator")) {
+//				getContactsForGroup(myService, email, contactGroups.get(group));
+//			}
+//		} catch (ServiceException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		// } catch (AuthenticationException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 	}
 
 }

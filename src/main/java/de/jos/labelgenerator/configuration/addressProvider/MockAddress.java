@@ -5,11 +5,11 @@ import de.jos.labelgenerator.configuration.Address;
 public class MockAddress implements Address {
 
 	public String getCity() {
-		return "Stuttgart";
+		return "Ostfildern";
 	}
 
 	public String getFamilyName() {
-		return "Roland Rohm & Volker Rohm";
+		return "Volker Rohm";
 	}
 
 	public String getGivenName() {
@@ -17,11 +17,11 @@ public class MockAddress implements Address {
 	}
 
 	public String getPostalCode() {
-		return "70619";
+		return "73760";
 	}
 
 	public String getStreet() {
-		return "Pfefferstr. 5";
+		return "Talwiesenweg 6";
 	}
 
 }

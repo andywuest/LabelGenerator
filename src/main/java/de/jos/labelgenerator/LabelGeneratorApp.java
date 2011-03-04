@@ -14,6 +14,7 @@ import org.jdesktop.application.LocalStorage;
 import org.jdesktop.application.SingleFrameApplication;
 
 import de.jos.labelgenerator.configuration.ApplicationConfiguration;
+import de.jos.labelgenerator.configuration.Preferences;
 import de.jos.labelgenerator.dialog.preferences.PreferencesDialogController;
 import de.jos.labelgenerator.formatter.CustomFormatter;
 
@@ -64,6 +65,9 @@ public class LabelGeneratorApp extends SingleFrameApplication {
 					.load(Constants.APPLICATION_CONFIGURATION_FILE);
 			logger.log(Level.INFO, String.format("Configuration loaded from directory %s ...", localStorage
 					.getDirectory().getAbsolutePath()));
+			if (applicationConfiguration != null && applicationConfiguration.getPreferences() == null) {
+				applicationConfiguration.setPreferences(new Preferences());
+			}
 			logic.initializeComponentsWithConfiguration(applicationConfiguration);
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, "Loading configuration failed ...", e);
@@ -99,7 +103,8 @@ public class LabelGeneratorApp extends SingleFrameApplication {
 
 	@org.jdesktop.application.Action
 	public void preferences() {
-		final PreferencesDialogController preferencesController = new PreferencesDialogController(appView.getFrame());
+		final PreferencesDialogController preferencesController = new PreferencesDialogController(appView.getFrame(),
+				appView.getLogic().getApplicationConfiguration());
 		preferencesController.showDialog();
 	}
 

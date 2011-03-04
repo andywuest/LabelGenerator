@@ -14,13 +14,16 @@ public class ButtonLabel extends JButton {
 
 	private String renderedTemplate = null;
 
+	private Integer index = null;
+
 	public ButtonLabel() {
 		super(" [ empty ] ");
 	}
-	
+
 	public ButtonLabel(int index) {
-		super(Integer.valueOf(index).toString());
-		setRenderedTemplate(String.valueOf(index));
+		super(" [ empty ] ");
+		this.index = index;
+		setRenderedTemplate(null);
 	}
 
 	public Address getAddress() {
@@ -45,6 +48,10 @@ public class ButtonLabel extends JButton {
 
 	public void setRenderedTemplate(String renderedTemplate) {
 		this.renderedTemplate = renderedTemplate;
+	}
+
+	public Integer getIndex() {
+		return index;
 	}
 
 }

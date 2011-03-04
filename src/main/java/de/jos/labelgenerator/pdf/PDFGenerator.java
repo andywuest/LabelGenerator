@@ -55,34 +55,47 @@ public class PDFGenerator {
 			int index = 0;
 			for (int row = 0; row < layout.getRows(); row++) {
 				for (int col = layout.getColumns() - 1; col >= 0; col--) {
+					final ButtonLabel buttonLabel = buttonLabelList.get(buttonLabelList.size() - index - 1);
+					String text = buttonLabel.getRenderedTemplate();
+
+					logger.log(Level.SEVERE, "Text {0} : {1} ", new Object[] { Integer.valueOf(index),
+							buttonLabel.getRenderedTemplate() });
 
 					final int x = mmToPoints(layout.getMarginLeft() + col * layout.getWidthNext());
 					final int y = mmToPoints(layout.getMarginTop() + row * layout.getHeightNext());
 					final int width = mmToPoints(layout.getWidth());
 					final int height = mmToPoints(layout.getHeight());
 					final Rectangle r = getRectangle(x, y, width, height);
+
 					// draw grid only when enabled!
 					if (drawGrid == true) {
 						cb.rectangle(r.getLeft(), r.getTop(), r.getWidth(), r.getHeight());
 						cb.stroke();
+						// do print the index number when no text is defined
+						if (StringUtils.trimToNull(text) == null) {
+							text = buttonLabel.getIndex().toString();
+						}
 					}
 
-					final ButtonLabel buttonLabel = buttonLabelList.get(buttonLabelList.size() - index - 1);
-
-					final String text = buttonLabel.getRenderedTemplate();
 					final String[] lines = StringUtils.split(text, "\n");
 
+					System.out.println(layout.getTextMarginTop());
+					
 					int offset = 0;
-					for (String tmpLine : lines) {
-						cb.beginText();
-						cb.setFontAndSize(font, layout.getFontSize());
-						cb.showTextAligned(PdfContentByte.ALIGN_LEFT, StringUtils.trim(tmpLine), x
-								+ layout.getTextMarginLeft().floatValue(), y + height
-								- (offset * (layout.getFontSize().floatValue() + layout.getTextMargin().floatValue()))
-								- layout.getTextMarginTop().floatValue(), 0);
-						cb.endText();
-						offset++;
+					if (lines != null && lines.length > 0) {
+						for (String tmpLine : lines) {
+							cb.beginText();
+							cb.setFontAndSize(font, layout.getFontSize());
+							cb.showTextAligned(PdfContentByte.ALIGN_LEFT, StringUtils.trim(tmpLine), x
+									+ mmToPoints(layout.getTextMarginLeft().floatValue()), y
+									+ height
+									- (offset * (layout.getFontSize().floatValue() + layout.getTextMargin()
+											.floatValue())) - mmToPoints(layout.getTextMarginTop().floatValue()), 0);
+							cb.endText();
+							offset++;
+						}
 					}
+
 					index++;
 				}
 			}
@@ -92,6 +105,7 @@ public class PDFGenerator {
 			result = true;
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Exception occured creating PDF file.", e);
+			e.printStackTrace();
 		}
 
 		return result;

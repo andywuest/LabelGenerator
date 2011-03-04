@@ -55,6 +55,7 @@ public class AppLogic implements MainDialogConstants {
 		if (applicationConfiguration != null) {
 			this.applicationConfiguration.setLastLayout(applicationConfiguration.getLastLayout());
 			this.applicationConfiguration.setLastTemplate(applicationConfiguration.getLastTemplate());
+			this.applicationConfiguration.setPreferences(applicationConfiguration.getPreferences());
 
 			// update the comboBoxes
 			view.getMainPanel().getComboBoxLayout().selectItemWithText(
@@ -154,6 +155,7 @@ public class AppLogic implements MainDialogConstants {
 
 		buttonLabelList.clear();
 
+		// add buttons to the preview panel
 		for (int i = 0; i < numberButtons; i++) {
 			final ButtonLabel button = new ButtonLabel(i);
 			button.addActionListener(new ActionListener() {

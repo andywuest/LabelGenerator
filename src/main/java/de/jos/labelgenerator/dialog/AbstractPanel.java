@@ -1,8 +1,8 @@
 package de.jos.labelgenerator.dialog;
 
-import javax.swing.JPanel;
-
 import org.jdesktop.application.ApplicationActionMap;
+
+import com.jgoodies.forms.debug.FormDebugPanel;
 
 /**
  * TODO move to other package
@@ -12,7 +12,7 @@ import org.jdesktop.application.ApplicationActionMap;
  * 
  */
 @SuppressWarnings("serial")
-public abstract class AbstractPanel extends JPanel {
+public abstract class AbstractPanel extends FormDebugPanel {
 
 	private ApplicationActionMap applicationActionMap = null;
 

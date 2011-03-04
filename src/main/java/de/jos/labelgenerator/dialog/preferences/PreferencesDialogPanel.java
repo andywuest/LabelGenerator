@@ -2,6 +2,7 @@ package de.jos.labelgenerator.dialog.preferences;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JTextField;
 
 import org.jdesktop.application.Application;
@@ -27,9 +28,13 @@ public class PreferencesDialogPanel extends AbstractPanel implements Preferences
 
 	private JTextField textFieldGMailPassword = null;
 
+	private JComboBox comboBoxGMailGroup = null;
+
 	private JButton buttonOk = null;
 
 	private JButton buttonCancel = null;
+
+	private JButton buttonTest = null;
 
 	private final ApplicationContext applicationContext = Application.getInstance(LabelGeneratorApp.class).getContext();
 
@@ -60,14 +65,21 @@ public class PreferencesDialogPanel extends AbstractPanel implements Preferences
 		buttonCancel.setAction(getAction(ACTION_CANCEL_BUTTON_PRESSED));
 		buttonCancel.setText(resourceMap.getString("button.cancel"));
 
+		buttonTest = new JButton();
+		buttonTest.setAction(getAction(ACTION_TEST_BUTTON_PRESSED));
+		buttonTest.setText(resourceMap.getString("button.test"));
+
 		textFieldGMailEmail = new JTextField();
 		textFieldGMailEmail.setEnabled(false);
 
 		textFieldGMailPassword = new JTextField();
 		textFieldGMailPassword.setEnabled(false);
 
-		final FormLayout layout = new FormLayout("4dlu, 100dlu, 4dlu, fill:default:grow, 4dlu", // column
-				"4dlu, 20dlu, 4dlu, 20dlu, 4dlu, 20dlu, 4dlu, 20dlu, 4dlu, fill:p:grow, 20dlu, 4dlu"); // row
+		comboBoxGMailGroup = new JComboBox();
+		comboBoxGMailGroup.setEnabled(false);
+
+		final FormLayout layout = new FormLayout("4dlu, 100dlu, 4dlu, 100dlu, 4dlu, fill:default:grow, 4dlu", // column
+				"4dlu, 20dlu, 4dlu, 20dlu, 4dlu, 20dlu, 4dlu, 20dlu, 4dlu, 20dlu, 4dlu, fill:p:grow, 20dlu, 4dlu"); // row
 
 		final PanelBuilder builder = new PanelBuilder(layout, this);
 
@@ -87,10 +99,20 @@ public class PreferencesDialogPanel extends AbstractPanel implements Preferences
 		builder.nextRow(2);
 
 		builder.add(textFieldGMailPassword);
+		builder.nextColumn(2);
+		builder.add(buttonTest);
+		builder.nextRow(2);
+
+		builder.setColumn(4);
+		builder.add(comboBoxGMailGroup);
 		builder.nextRow(3);
 
 		builder.setColumn(4);
 		builder.add(ButtonBarFactory.buildRightAlignedBar(buttonCancel, buttonOk));
+	}
+
+	public JCheckBox getCheckboxFilesystemProvider() {
+		return checkboxFilesystemProvider;
 	}
 
 	public JCheckBox getCheckboxGMailProvider() {
@@ -103,6 +125,10 @@ public class PreferencesDialogPanel extends AbstractPanel implements Preferences
 
 	public JTextField getTextFieldGMailPassword() {
 		return textFieldGMailPassword;
+	}
+
+	public JComboBox getComboBoxGMailGroup() {
+		return comboBoxGMailGroup;
 	}
 
 }
