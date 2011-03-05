@@ -4,7 +4,7 @@ public class Preferences {
 
 	private String gmailEmail = null;
 
-	private String gmailGroup = null;
+	private GMailGroup gmailGroup = null;
 
 	private transient String gmailPassword = null;
 
@@ -23,11 +23,11 @@ public class Preferences {
 		this.gmailEmail = gmailEmail;
 	}
 
-	public String getGmailGroup() {
+	public GMailGroup getGmailGroup() {
 		return gmailGroup;
 	}
 
-	public void setGmailGroup(String gmailGroup) {
+	public void setGmailGroup(GMailGroup gmailGroup) {
 		this.gmailGroup = gmailGroup;
 	}
 

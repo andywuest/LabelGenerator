@@ -10,7 +10,6 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationContext;
 
 import de.jos.labelgenerator.LabelGeneratorApp;
-import de.jos.labelgenerator.configuration.ApplicationConfiguration;
 
 public class PreferencesDialogController {
 
@@ -29,8 +28,6 @@ public class PreferencesDialogController {
 				.getActionMap(logic));
 
 		logic.setPreferencesDialogPanel(preferencesDialogPanel);
-		logic.applyPreferencesToPanel();
-		
 
 		// define modal dialog
 		dialog.setModal(true);

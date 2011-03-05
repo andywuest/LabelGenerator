@@ -75,7 +75,8 @@ public class LabelGeneratorApp extends SingleFrameApplication {
 		final LocalStorage localStorage = applicationContext.getLocalStorage();
 
 		try {
-			final AppLogic logic = appView.getLogic();
+			// TODO workaround for non transient password
+			applicationConfiguration.getPreferences().setGmailPassword(null);
 			localStorage.save(applicationConfiguration, Constants.APPLICATION_CONFIGURATION_FILE);
 			logger.log(Level.INFO, "Configuration saved ...");
 		} catch (IOException e) {

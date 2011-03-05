@@ -1,6 +1,8 @@
 package de.jos.labelgenerator.dialog.preferences;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JDialog;
@@ -8,8 +10,13 @@ import javax.swing.JOptionPane;
 
 import org.jdesktop.application.Action;
 
+import com.google.common.collect.ImmutableSortedSet;
+
 import de.jos.labelgenerator.LabelGeneratorApp;
+import de.jos.labelgenerator.combobox.AbstractComboBoxItem;
+import de.jos.labelgenerator.combobox.GMailGroupComboBoxItem;
 import de.jos.labelgenerator.configuration.ApplicationConfiguration;
+import de.jos.labelgenerator.configuration.GMailGroup;
 import de.jos.labelgenerator.configuration.Preferences;
 import de.jos.labelgenerator.configuration.addressProvider.GMailAddressProvider;
 
@@ -32,16 +39,18 @@ public class PreferencesDialogLogic implements PreferencesDialogConstants {
 
 	@Action(name = ACTION_OK_BUTTON_PRESSED)
 	public void okButtonPressed(final ActionEvent actionEvent) {
-		final ApplicationConfiguration configuration = LabelGeneratorApp.getApplicationConfiguration();
 		if (preferencesDialogPanel != null) {
-			final Preferences preferences = configuration.getPreferences();
+			final Preferences preferences = LabelGeneratorApp.getApplicationConfiguration().getPreferences();
 			preferences.setCheckboxFilesystemProvider(preferencesDialogPanel.getCheckboxFilesystemProvider()
 					.isSelected());
 			preferences.setCheckboxGMailProvider(preferencesDialogPanel.getCheckboxGMailProvider().isSelected());
 			preferences.setGmailEmail(preferencesDialogPanel.getTextFieldGMailEmail().getText());
-//			preferences.setGmailGroup(preferencesDialogPanel.getComboBoxGMailGroup().getSelectedItem().toString());
+			preferences.setGmailPassword(new String(preferencesDialogPanel.getPasswordFieldGMailPassword()
+					.getPassword()));
+			if (preferencesDialogPanel.getComboBoxGMailGroup().getSelectedItem() != null) {
+				preferences.setGmailGroup(preferencesDialogPanel.getComboBoxGMailGroup().getSelectedItem().getValue());
+			}
 		}
-
 		dialog.setVisible(false);
 		dialog.dispose();
 	}
@@ -50,7 +59,7 @@ public class PreferencesDialogLogic implements PreferencesDialogConstants {
 	public void testButtonPressed(final ActionEvent actionEvent) throws Exception {
 		System.out.println("test button");
 		final String email = preferencesDialogPanel.getTextFieldGMailEmail().getText();
-		final String password = preferencesDialogPanel.getTextFieldGMailPassword().getText();
+		final String password = new String(preferencesDialogPanel.getPasswordFieldGMailPassword().getPassword());
 		final GMailAddressProvider gmailProvider = new GMailAddressProvider(email, password);
 		final boolean credentialsOk = gmailProvider.isLoginSuccessful();
 
@@ -60,11 +69,28 @@ public class PreferencesDialogLogic implements PreferencesDialogConstants {
 
 		// get the groups
 		if (credentialsOk) {
-			Map<String, String> contactGroups = gmailProvider.getContactGroups();
-			for (Map.Entry<String, String> tmpEntry : contactGroups.entrySet()) {
-				preferencesDialogPanel.getComboBoxGMailGroup().addItem(tmpEntry.getKey());
+			// remove all old groups
+			preferencesDialogPanel.getComboBoxGMailGroup().removeAllItems();
+			final List<GMailGroupComboBoxItem> comboBoxItems = new ArrayList<GMailGroupComboBoxItem>();
+			final Map<String, String> contactGroups = gmailProvider.getContactGroups();
+			for (final Map.Entry<String, String> tmpEntry : contactGroups.entrySet()) {
+				final GMailGroup gmailGroup = new GMailGroup(tmpEntry.getKey(), tmpEntry.getValue());
+				// add group
+				comboBoxItems.add(new GMailGroupComboBoxItem(gmailGroup));
 			}
-			System.out.println(contactGroups);
+
+			// add the sorted items to the comboBox
+			// TODO improve generics here !
+			preferencesDialogPanel.getComboBoxGMailGroup().addItems(
+					ImmutableSortedSet.orderedBy(AbstractComboBoxItem.nameOrdering).addAll(comboBoxItems).build());
+
+			// preselect the group from the configuration
+			final ApplicationConfiguration configuration = LabelGeneratorApp.getApplicationConfiguration();
+			final GMailGroup selectedGMailGroup = configuration.getPreferences().getGmailGroup();
+			if (selectedGMailGroup != null) {
+				preferencesDialogPanel.getComboBoxGMailGroup().selectItemWithText(
+						new GMailGroupComboBoxItem(selectedGMailGroup));
+			}
 		}
 
 	}
@@ -72,39 +98,15 @@ public class PreferencesDialogLogic implements PreferencesDialogConstants {
 	@Action(name = ACTION_GMAIL_PROVIDER_CHECKBOX_CLICKED)
 	public void GMailProviderClicked(final ActionEvent actionEvent) {
 		if (preferencesDialogPanel != null) {
-			if (preferencesDialogPanel.getCheckboxGMailProvider().isSelected()) {
-				preferencesDialogPanel.getTextFieldGMailEmail().setEnabled(true);
-				preferencesDialogPanel.getTextFieldGMailPassword().setEnabled(true);
-				preferencesDialogPanel.getComboBoxGMailGroup().setEnabled(true);
-			} else {
-				preferencesDialogPanel.getTextFieldGMailEmail().setEnabled(false);
-				preferencesDialogPanel.getTextFieldGMailPassword().setEnabled(false);
-				preferencesDialogPanel.getComboBoxGMailGroup().setEnabled(false);
-			}
+			boolean gmailProviderSelected = preferencesDialogPanel.getCheckboxGMailProvider().isSelected();
+			preferencesDialogPanel.getTextFieldGMailEmail().setEnabled(gmailProviderSelected);
+			preferencesDialogPanel.getPasswordFieldGMailPassword().setEnabled(gmailProviderSelected);
+			preferencesDialogPanel.getComboBoxGMailGroup().setEnabled(gmailProviderSelected);
 		}
 	}
 
 	public void setPreferencesDialogPanel(PreferencesDialogPanel preferencesDialogPanel) {
 		this.preferencesDialogPanel = preferencesDialogPanel;
-	}
-
-	/**
-	 * TODO noch benötigt ??
-	 */
-	public void applyPreferencesToPanel() {
-		final ApplicationConfiguration configuration = LabelGeneratorApp.getApplicationConfiguration();
-		if (preferencesDialogPanel != null) {
-			final Preferences preferences = configuration.getPreferences();
-			if (preferences != null) {
-				preferencesDialogPanel.getCheckboxFilesystemProvider().setSelected(
-						preferences.getCheckboxFilesystemProvider());
-				preferencesDialogPanel.getCheckboxGMailProvider().setSelected(preferences.getCheckboxGMailProvider());
-				preferencesDialogPanel.getTextFieldGMailEmail().setText(preferences.getGmailEmail());
-				preferencesDialogPanel.getComboBoxGMailGroup().setSelectedItem(preferences.getGmailGroup());
-				preferencesDialogPanel.getTextFieldGMailPassword().setText(preferences.getGmailPassword());
-			}
-		}
-		GMailProviderClicked(null);
 	}
 
 }

@@ -2,6 +2,8 @@ package de.jos.labelgenerator.combobox;
 
 import javax.swing.JComboBox;
 
+import com.google.common.collect.ImmutableCollection;
+
 @SuppressWarnings("serial")
 public class AbstractComboBox<T extends AbstractComboBoxItem> extends JComboBox {
 
@@ -9,6 +11,12 @@ public class AbstractComboBox<T extends AbstractComboBoxItem> extends JComboBox 
 	@SuppressWarnings("unchecked")
 	public T getSelectedItem() {
 		return (T) super.getSelectedItem();
+	}
+
+	public void addItems(ImmutableCollection<AbstractComboBoxItem> itemSet) {
+		for (AbstractComboBoxItem tmpItem : itemSet) {
+			super.addItem((T) tmpItem);
+		}
 	}
 
 	@Override

@@ -2,7 +2,7 @@ package de.jos.labelgenerator.dialog.preferences;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import org.jdesktop.application.Application;
@@ -16,6 +16,10 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import de.jos.labelgenerator.LabelGeneratorApp;
+import de.jos.labelgenerator.combobox.ComboBoxGMailGroup;
+import de.jos.labelgenerator.combobox.GMailGroupComboBoxItem;
+import de.jos.labelgenerator.configuration.ApplicationConfiguration;
+import de.jos.labelgenerator.configuration.Preferences;
 import de.jos.labelgenerator.dialog.AbstractPanel;
 
 public class PreferencesDialogPanel extends AbstractPanel implements PreferencesDialogConstants {
@@ -26,9 +30,9 @@ public class PreferencesDialogPanel extends AbstractPanel implements Preferences
 
 	private JTextField textFieldGMailEmail = null;
 
-	private JTextField textFieldGMailPassword = null;
+	private JPasswordField passwordFieldGMailPassword = null;
 
-	private JComboBox comboBoxGMailGroup = null;
+	private ComboBoxGMailGroup comboBoxGMailGroup = null;
 
 	private JButton buttonOk = null;
 
@@ -70,14 +74,31 @@ public class PreferencesDialogPanel extends AbstractPanel implements Preferences
 		buttonTest.setText(resourceMap.getString("button.test"));
 
 		textFieldGMailEmail = new JTextField();
-		textFieldGMailEmail.setEnabled(false);
 
-		textFieldGMailPassword = new JTextField();
-		textFieldGMailPassword.setEnabled(false);
+		passwordFieldGMailPassword = new JPasswordField();
 
-		comboBoxGMailGroup = new JComboBox();
-		comboBoxGMailGroup.setEnabled(false);
+		comboBoxGMailGroup = new ComboBoxGMailGroup();
 
+		// get configuration and apply it to components
+		final ApplicationConfiguration configuration = LabelGeneratorApp.getApplicationConfiguration();
+		final Preferences preferences = configuration.getPreferences();
+		checkboxFilesystemProvider.setSelected(preferences.getCheckboxFilesystemProvider());
+		checkboxGMailProvider.setSelected(preferences.getCheckboxGMailProvider());
+		textFieldGMailEmail.setText(preferences.getGmailEmail());
+		// if a gmail group was found in the configuration
+		if (preferences.getGmailGroup() != null) {
+			// add the gmail group to the list and select it
+			comboBoxGMailGroup.addItem(new GMailGroupComboBoxItem(preferences.getGmailGroup()));
+			comboBoxGMailGroup.setSelectedItem(preferences.getGmailGroup());
+		}
+		passwordFieldGMailPassword.setText(preferences.getGmailPassword());
+		// if checkboxGMailProvider is selected, enable input fields
+		boolean gmailProviderSelected = checkboxGMailProvider.isSelected();
+		textFieldGMailEmail.setEnabled(gmailProviderSelected);
+		passwordFieldGMailPassword.setEnabled(gmailProviderSelected);
+		comboBoxGMailGroup.setEnabled(gmailProviderSelected);
+
+		// build layout
 		final FormLayout layout = new FormLayout("4dlu, 100dlu, 4dlu, 100dlu, 4dlu, fill:default:grow, 4dlu", // column
 				"4dlu, 20dlu, 4dlu, 20dlu, 4dlu, 20dlu, 4dlu, 20dlu, 4dlu, 20dlu, 4dlu, fill:p:grow, 20dlu, 4dlu"); // row
 
@@ -98,7 +119,7 @@ public class PreferencesDialogPanel extends AbstractPanel implements Preferences
 		builder.add(textFieldGMailEmail);
 		builder.nextRow(2);
 
-		builder.add(textFieldGMailPassword);
+		builder.add(passwordFieldGMailPassword);
 		builder.nextColumn(2);
 		builder.add(buttonTest);
 		builder.nextRow(2);
@@ -123,11 +144,11 @@ public class PreferencesDialogPanel extends AbstractPanel implements Preferences
 		return textFieldGMailEmail;
 	}
 
-	public JTextField getTextFieldGMailPassword() {
-		return textFieldGMailPassword;
+	public JPasswordField getPasswordFieldGMailPassword() {
+		return passwordFieldGMailPassword;
 	}
 
-	public JComboBox getComboBoxGMailGroup() {
+	public ComboBoxGMailGroup getComboBoxGMailGroup() {
 		return comboBoxGMailGroup;
 	}
 
