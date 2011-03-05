@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 
 import org.jdesktop.application.Action;
 
+import de.jos.labelgenerator.LabelGeneratorApp;
 import de.jos.labelgenerator.configuration.ApplicationConfiguration;
 import de.jos.labelgenerator.configuration.Preferences;
 import de.jos.labelgenerator.configuration.addressProvider.GMailAddressProvider;
@@ -18,11 +19,8 @@ public class PreferencesDialogLogic implements PreferencesDialogConstants {
 
 	private JDialog dialog = null;
 
-	private ApplicationConfiguration applicationConfiguration = null;
-
-	public PreferencesDialogLogic(JDialog dialog, ApplicationConfiguration applicationConfiguration) {
+	public PreferencesDialogLogic(JDialog dialog) {
 		this.dialog = dialog;
-		this.applicationConfiguration = applicationConfiguration;
 	}
 
 	@Action(name = ACTION_CANCEL_BUTTON_PRESSED)
@@ -34,14 +32,14 @@ public class PreferencesDialogLogic implements PreferencesDialogConstants {
 
 	@Action(name = ACTION_OK_BUTTON_PRESSED)
 	public void okButtonPressed(final ActionEvent actionEvent) {
-		if (applicationConfiguration != null && applicationConfiguration.getPreferences() != null
-				&& preferencesDialogPanel != null) {
-			final Preferences preferences = applicationConfiguration.getPreferences();
+		final ApplicationConfiguration configuration = LabelGeneratorApp.getApplicationConfiguration();
+		if (preferencesDialogPanel != null) {
+			final Preferences preferences = configuration.getPreferences();
 			preferences.setCheckboxFilesystemProvider(preferencesDialogPanel.getCheckboxFilesystemProvider()
 					.isSelected());
 			preferences.setCheckboxGMailProvider(preferencesDialogPanel.getCheckboxGMailProvider().isSelected());
 			preferences.setGmailEmail(preferencesDialogPanel.getTextFieldGMailEmail().getText());
-			preferences.setGmailGroup(preferencesDialogPanel.getComboBoxGMailGroup().getSelectedItem().toString());
+//			preferences.setGmailGroup(preferencesDialogPanel.getComboBoxGMailGroup().getSelectedItem().toString());
 		}
 
 		dialog.setVisible(false);
@@ -90,9 +88,13 @@ public class PreferencesDialogLogic implements PreferencesDialogConstants {
 		this.preferencesDialogPanel = preferencesDialogPanel;
 	}
 
+	/**
+	 * TODO noch benötigt ??
+	 */
 	public void applyPreferencesToPanel() {
-		if (preferencesDialogPanel != null && applicationConfiguration != null) {
-			final Preferences preferences = applicationConfiguration.getPreferences();
+		final ApplicationConfiguration configuration = LabelGeneratorApp.getApplicationConfiguration();
+		if (preferencesDialogPanel != null) {
+			final Preferences preferences = configuration.getPreferences();
 			if (preferences != null) {
 				preferencesDialogPanel.getCheckboxFilesystemProvider().setSelected(
 						preferences.getCheckboxFilesystemProvider());

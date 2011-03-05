@@ -40,8 +40,6 @@ public class AppLogic implements MainDialogConstants {
 
 	private List<Layout> layouts = new ArrayList<Layout>();
 
-	private ApplicationConfiguration applicationConfiguration = new ApplicationConfiguration();
-
 	private List<ButtonLabel> buttonLabelList = new ArrayList<ButtonLabel>();
 
 	public AppLogic(final AppView view) {
@@ -52,11 +50,16 @@ public class AppLogic implements MainDialogConstants {
 		layouts.addAll(new FilesystemLayoutProvider().getLayouts());
 	}
 
+	/**
+	 * TODO use static configuration !!
+	 * 
+	 * @param applicationConfiguration
+	 */
 	public void initializeComponentsWithConfiguration(ApplicationConfiguration applicationConfiguration) {
 		if (applicationConfiguration != null) {
-			this.applicationConfiguration.setLastLayout(applicationConfiguration.getLastLayout());
-			this.applicationConfiguration.setLastTemplate(applicationConfiguration.getLastTemplate());
-			this.applicationConfiguration.setPreferences(applicationConfiguration.getPreferences());
+			// this.applicationConfiguration.setLastLayout(applicationConfiguration.getLastLayout());
+			// this.applicationConfiguration.setLastTemplate(applicationConfiguration.getLastTemplate());
+			// this.applicationConfiguration.setPreferences(applicationConfiguration.getPreferences());
 
 			// update the comboBoxes
 			view.getMainPanel().getComboBoxLayout().selectItemWithText(
@@ -66,14 +69,13 @@ public class AppLogic implements MainDialogConstants {
 		}
 
 	}
-	
+
 	@org.jdesktop.application.Action
 	public void preferences() {
 		System.out.println("pref in logic !");
-		final PreferencesDialogController preferencesController = new PreferencesDialogController(getView().getFrame(),
-				getApplicationConfiguration());
+		final PreferencesDialogController preferencesController = new PreferencesDialogController(getView().getFrame());
 		preferencesController.showDialog();
-	}	
+	}
 
 	public AppView getView() {
 		return view;
@@ -170,7 +172,7 @@ public class AppLogic implements MainDialogConstants {
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					final AddressDialogController dialogController = new AddressDialogController(view.getFrame(),
-							button, applicationConfiguration);
+							button);
 					dialogController.showDialog();
 				}
 			});
@@ -184,11 +186,8 @@ public class AppLogic implements MainDialogConstants {
 		view.getMainPanel().getPanelLayoutPreview().repaint();
 
 		// update the applicationConfiguration
-		getApplicationConfiguration().setLastLayout(selectedLayout);
-	}
-
-	public ApplicationConfiguration getApplicationConfiguration() {
-		return applicationConfiguration;
+		final ApplicationConfiguration configuration = LabelGeneratorApp.getApplicationConfiguration();
+		configuration.setLastLayout(selectedLayout);
 	}
 
 }

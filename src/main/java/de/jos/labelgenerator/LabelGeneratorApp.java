@@ -21,6 +21,8 @@ public class LabelGeneratorApp extends SingleFrameApplication {
 
 	private static final Logger logger = Logger.getLogger(LabelGeneratorApp.class.getName());
 
+	private static ApplicationConfiguration applicationConfiguration = null;
+
 	private AppView appView = null;
 
 	private void createDirectory(final File directory) {
@@ -59,15 +61,10 @@ public class LabelGeneratorApp extends SingleFrameApplication {
 		final LocalStorage localStorage = applicationContext.getLocalStorage();
 
 		try {
-			final AppLogic logic = appView.getLogic();
-			final ApplicationConfiguration applicationConfiguration = (ApplicationConfiguration) localStorage
+			applicationConfiguration = (ApplicationConfiguration) localStorage
 					.load(Constants.APPLICATION_CONFIGURATION_FILE);
 			logger.log(Level.INFO, String.format("Configuration loaded from directory %s ...", localStorage
 					.getDirectory().getAbsolutePath()));
-			if (applicationConfiguration != null && applicationConfiguration.getPreferences() == null) {
-				applicationConfiguration.setPreferences(new Preferences());
-			}
-			logic.initializeComponentsWithConfiguration(applicationConfiguration);
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, "Loading configuration failed ...", e);
 		}
@@ -79,7 +76,7 @@ public class LabelGeneratorApp extends SingleFrameApplication {
 
 		try {
 			final AppLogic logic = appView.getLogic();
-			localStorage.save(logic.getApplicationConfiguration(), Constants.APPLICATION_CONFIGURATION_FILE);
+			localStorage.save(applicationConfiguration, Constants.APPLICATION_CONFIGURATION_FILE);
 			logger.log(Level.INFO, "Configuration saved ...");
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, String.format("Saving configuration to directory %s failed ...", localStorage
@@ -87,9 +84,26 @@ public class LabelGeneratorApp extends SingleFrameApplication {
 		}
 	}
 
+	/**
+	 * Provides static access to the application configuration. If the
+	 * configuration is not yet fully initialized, it will be done before
+	 * returning the configuration.
+	 * 
+	 * @return
+	 */
+	public static ApplicationConfiguration getApplicationConfiguration() {
+		if (applicationConfiguration == null) {
+			applicationConfiguration = new ApplicationConfiguration();
+		}
+		if (applicationConfiguration.getPreferences() == null) {
+			applicationConfiguration.setPreferences(new Preferences());
+		}
+
+		return applicationConfiguration;
+	}
+
 	@Override
 	protected void startup() {
-		appView = new AppView(this);
 		// prepare directories
 		prepareDirectories();
 		// clear temp directory
@@ -97,15 +111,10 @@ public class LabelGeneratorApp extends SingleFrameApplication {
 		// load configuration
 		loadConfiguration();
 
+		appView = new AppView(this);
+
 		show(appView);
 	}
-
-//	@org.jdesktop.application.Action
-//	public void preferences() {
-//		final PreferencesDialogController preferencesController = new PreferencesDialogController(appView.getFrame(),
-//				appView.getLogic().getApplicationConfiguration());
-//		preferencesController.showDialog();
-//	}
 
 	@Override
 	protected void ready() {

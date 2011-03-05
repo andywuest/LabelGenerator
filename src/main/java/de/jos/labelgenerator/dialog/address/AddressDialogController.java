@@ -14,7 +14,6 @@ import org.jdesktop.application.ApplicationContext;
 import de.jos.labelgenerator.LabelGeneratorApp;
 import de.jos.labelgenerator.components.button.ButtonLabel;
 import de.jos.labelgenerator.configuration.Address;
-import de.jos.labelgenerator.configuration.ApplicationConfiguration;
 import de.jos.labelgenerator.configuration.Template;
 import de.jos.labelgenerator.configuration.UndefinedAddress;
 import de.jos.labelgenerator.configuration.addressProvider.AddressProvider;
@@ -27,11 +26,10 @@ public class AddressDialogController {
 	private final List<Template> templates = new ArrayList<Template>();
 
 	private JDialog dialog = null;
-	
+
 	private final ApplicationContext applicationContext = Application.getInstance(LabelGeneratorApp.class).getContext();
 
-	public AddressDialogController(Frame parentFrame, 
-			ButtonLabel selectedButton, ApplicationConfiguration applicationConfiguration) {
+	public AddressDialogController(Frame parentFrame, ButtonLabel selectedButton) {
 		// read the available addresses
 		// final AddressProvider addressProvider = new
 		// FilesystemVCardAddressProvider();
@@ -47,8 +45,7 @@ public class AddressDialogController {
 		dialog = new JDialog(parentFrame, "test");
 
 		// create the dialog logic
-		final AddressPanelLogic addressPanelLogic = new AddressPanelLogic(dialog, selectedButton,
-				applicationConfiguration);
+		final AddressPanelLogic addressPanelLogic = new AddressPanelLogic(dialog, selectedButton);
 
 		// create the dialog main panel
 		final AddressDialogPanel addressPanel = new AddressDialogPanel(applicationContext

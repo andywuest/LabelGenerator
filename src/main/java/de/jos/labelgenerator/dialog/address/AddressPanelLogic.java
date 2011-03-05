@@ -8,6 +8,7 @@ import javax.swing.JDialog;
 
 import org.jdesktop.application.Action;
 
+import de.jos.labelgenerator.LabelGeneratorApp;
 import de.jos.labelgenerator.combobox.AddressComboBoxItem;
 import de.jos.labelgenerator.combobox.TemplateComboBoxItem;
 import de.jos.labelgenerator.components.button.ButtonLabel;
@@ -28,13 +29,9 @@ public class AddressPanelLogic implements AddressDialogConstants {
 
 	private TemplatingEngine templateEngine = null;
 
-	private ApplicationConfiguration applicationConfiguration = null;
-
-	public AddressPanelLogic(JDialog dialog, ButtonLabel selectedButton,
-			ApplicationConfiguration applicationConfiguration) {
+	public AddressPanelLogic(JDialog dialog, ButtonLabel selectedButton) {
 		this.dialog = dialog;
 		this.selectedButton = selectedButton;
-		this.applicationConfiguration = applicationConfiguration;
 		templateEngine = new TemplatingEngine();
 	}
 
@@ -42,15 +39,17 @@ public class AddressPanelLogic implements AddressDialogConstants {
 		if (selectedButton.getAddress() != null) {
 			addressPanel.getComboBoxAddress().selectItemWithText(new AddressComboBoxItem(selectedButton.getAddress()));
 		}
-		// preselect template if it has already been chosen for the button - else use the
+		// preselect template if it has already been chosen for the button -
+		// else use the
 		// template from the configuration.
 		if (selectedButton.getTemplate() != null) {
 			addressPanel.getComboBoxTemplate().selectItemWithText(
 					new TemplateComboBoxItem(selectedButton.getTemplate()));
 		} else {
-			if (applicationConfiguration.getLastTemplate() != null) {
+			final ApplicationConfiguration configuration = LabelGeneratorApp.getApplicationConfiguration();
+			if (configuration.getLastTemplate() != null) {
 				addressPanel.getComboBoxTemplate().selectItemWithText(
-						new TemplateComboBoxItem(applicationConfiguration.getLastTemplate()));
+						new TemplateComboBoxItem(configuration.getLastTemplate()));
 			}
 
 		}
@@ -123,7 +122,8 @@ public class AddressPanelLogic implements AddressDialogConstants {
 			// remember the template in the configuration
 			final TemplateComboBoxItem selectedTemplate = addressPanel.getComboBoxTemplate().getSelectedItem();
 			if (selectedTemplate != null) {
-				applicationConfiguration.setLastTemplate(selectedTemplate.getValue());
+				final ApplicationConfiguration configuration = LabelGeneratorApp.getApplicationConfiguration();
+				configuration.setLastTemplate(selectedTemplate.getValue());
 			}
 		}
 

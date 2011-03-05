@@ -18,16 +18,12 @@ public class PreferencesDialogController {
 
 	private final ApplicationContext applicationContext = Application.getInstance(LabelGeneratorApp.class).getContext();
 
-	private ApplicationConfiguration applicationConfiguration = null;
-
-	public PreferencesDialogController(final Frame parentFrame, final ApplicationConfiguration applicationConfiguration) {
-		this.applicationConfiguration = applicationConfiguration;
-
+	public PreferencesDialogController(final Frame parentFrame) {
 		// ceate the dialog
 		dialog = new JDialog(parentFrame, "preferences");
 
 		// application configuration
-		final PreferencesDialogLogic logic = new PreferencesDialogLogic(dialog, applicationConfiguration);
+		final PreferencesDialogLogic logic = new PreferencesDialogLogic(dialog);
 
 		final PreferencesDialogPanel preferencesDialogPanel = new PreferencesDialogPanel(applicationContext
 				.getActionMap(logic));
