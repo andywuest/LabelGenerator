@@ -10,6 +10,7 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationContext;
 
 import de.jos.labelgenerator.LabelGeneratorApp;
+import de.jos.labelgenerator.components.dialog.EscapeDialog;
 
 public class PreferencesDialogController {
 
@@ -19,7 +20,7 @@ public class PreferencesDialogController {
 
 	public PreferencesDialogController(final Frame parentFrame) {
 		// ceate the dialog
-		dialog = new JDialog(parentFrame, "preferences");
+		dialog = new EscapeDialog(parentFrame, "preferences");
 
 		// application configuration
 		final PreferencesDialogLogic logic = new PreferencesDialogLogic(dialog);
