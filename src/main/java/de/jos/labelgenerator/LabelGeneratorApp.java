@@ -13,6 +13,7 @@ import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.LocalStorage;
 import org.jdesktop.application.SingleFrameApplication;
 
+import de.jos.labelgenerator.beaninfo.BeanInfoUtil;
 import de.jos.labelgenerator.configuration.ApplicationConfiguration;
 import de.jos.labelgenerator.configuration.Preferences;
 import de.jos.labelgenerator.formatter.CustomFormatter;
@@ -75,8 +76,6 @@ public class LabelGeneratorApp extends SingleFrameApplication {
 		final LocalStorage localStorage = applicationContext.getLocalStorage();
 
 		try {
-			// TODO workaround for non transient password
-			// applicationConfiguration.getPreferences().setGmailPassword(null);
 			localStorage.save(applicationConfiguration, Constants.APPLICATION_CONFIGURATION_FILE);
 			logger.log(Level.INFO, "Configuration saved ...");
 		} catch (IOException e) {
@@ -105,6 +104,8 @@ public class LabelGeneratorApp extends SingleFrameApplication {
 
 	@Override
 	protected void startup() {
+		// mark transient attributes in BeanInfo for preference classes
+		BeanInfoUtil.markTransientAttributes(Preferences.class);
 		// prepare directories
 		prepareDirectories();
 		// clear temp directory

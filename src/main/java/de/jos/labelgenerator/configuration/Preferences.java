@@ -1,12 +1,14 @@
 package de.jos.labelgenerator.configuration;
 
+import de.jos.labelgenerator.beaninfo.Transient;
+
 public class Preferences {
 
 	private String gmailEmail = null;
 
 	private GMailGroup gmailGroup = null;
 
-	private transient String gmailPassword = null;
+	private String gmailPassword = null;
 
 	private boolean checkboxFilesystemProvider = true;
 
@@ -31,6 +33,7 @@ public class Preferences {
 		this.gmailGroup = gmailGroup;
 	}
 
+	@Transient
 	public String getGmailPassword() {
 		return gmailPassword;
 	}
