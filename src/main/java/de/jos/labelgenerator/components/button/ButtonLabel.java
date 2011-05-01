@@ -12,7 +12,10 @@ public class ButtonLabel extends JButton {
 
 	private Template template = null;
 
+	@Deprecated
 	private String renderedTemplate = null;
+
+	private String renderedStylesheet = null;
 
 	private Integer index = null;
 
@@ -52,6 +55,14 @@ public class ButtonLabel extends JButton {
 
 	public Integer getIndex() {
 		return index;
+	}
+
+	public String getRenderedStylesheet() {
+		return renderedStylesheet;
+	}
+
+	public void setRenderedStylesheet(String renderedStylesheet) {
+		this.renderedStylesheet = renderedStylesheet;
 	}
 
 }
