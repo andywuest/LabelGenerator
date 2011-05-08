@@ -7,32 +7,22 @@
 	<artifactId>labelgenerator</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	
-	<!--  https://github.com/andywuest/LabelGenerator -->
 
-	<repositories>
-		<repository>
-			<id>maven2-repository.dev.java.net</id>
-			<name>Java.net Repository for Maven</name>
-			<url>http://download.java.net/maven/2/</url>
-			<layout>default</layout>
-		</repository>
-		<repository>
-			<id>itextpdf.com</id>
-			<name>Maven Repository for iText</name>
-			<url>http://maven.itextpdf.com/</url>
-		</repository>
-		<repository>
-			<id>uni.konstanz_vcard</id>
-			<name>Uni Konstanz Repository for Maven</name>
-			<url>http://www.inf.uni-konstanz.de/dbis/basex/maven</url>
-			<layout>default</layout>
-		</repository>
-		<repository>
-			<id>mandubian-mvn_google</id>
-			<url>http://mandubian-mvn.googlecode.com/svn/trunk/mandubian-mvn/repository</url>
-		</repository>
-	</repositories>
+	<!--  https://github.com/andywuest/LabelGenerator -->
+	<!--
+		<repositories> <repository> <id>maven2-repository.dev.java.net</id>
+		<name>Java.net Repository for Maven</name>
+		<url>http://download.java.net/maven/2/</url> <layout>default</layout>
+		</repository> <repository> <id>itextpdf.com</id> <name>Maven
+		Repository for iText</name> <url>http://maven.itextpdf.com/</url>
+		</repository> <repository> <id>uni.konstanz_vcard</id> <name>Uni
+		Konstanz Repository for Maven</name>
+		<url>http://www.inf.uni-konstanz.de/dbis/basex/maven</url>
+		<layout>default</layout> </repository> <repository>
+		<id>mandubian-mvn_google</id>
+		<url>http://mandubian-mvn.googlecode.com/svn/trunk/mandubian-mvn/repository</url>
+		</repository> </repositories>
+	-->
 
 	<dependencies>
 		<dependency>
@@ -84,6 +74,31 @@
 			<groupId>com.google.gdata</groupId>
 			<artifactId>gdata-client-1.0</artifactId>
 			<version>${gdata-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.schlichtherle.truezip</groupId>
+			<artifactId>truezip-samples</artifactId>
+			<version>${truezip-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.schlichtherle.truezip</groupId>
+			<artifactId>truezip-file</artifactId>
+			<version>${truezip-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.artofsolving</groupId>
+			<artifactId>jodconverter</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-jdk14</artifactId>
+			<version>1.6.1</version>
 		</dependency>
 	</dependencies>
 
@@ -156,6 +171,7 @@
 		<freemarker-version>2.3.14</freemarker-version>
 		<itext-version>5.0.4</itext-version>
 		<gdata-version>1.36.0</gdata-version>
+		<truezip-version>7.0-rc2</truezip-version>
 	</properties>
 
 </project>
