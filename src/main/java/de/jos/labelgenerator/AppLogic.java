@@ -25,6 +25,7 @@ import de.jos.labelgenerator.dialog.address.AddressDialogController;
 import de.jos.labelgenerator.dialog.main.MainDialogConstants;
 import de.jos.labelgenerator.dialog.preferences.PreferencesDialogController;
 import de.jos.labelgenerator.pdf.PDFGenerator;
+import de.jos.labelgenerator.pdf.PDFGeneratorIText;
 
 /**
  * TODO move to dialog/main
@@ -105,7 +106,7 @@ public class AppLogic implements MainDialogConstants {
 			final File pdfFile = File.createTempFile("labelGenerator", ".pdf", Constants.FILE_DIRECTORY_TMP);
 
 			if (comboBoxItem != null) {
-				final PDFGenerator pdfGenerator = new PDFGenerator(pdfFile);
+				final PDFGenerator pdfGenerator = new PDFGeneratorIText(pdfFile);
 				final boolean drawGrid = view.getMainPanel().getCheckBoxDrawGrid().isSelected();
 				// generate pdf and only open it if it was successful
 				if (pdfGenerator.generate(comboBoxItem.getValue(), buttonLabelList, drawGrid) == true) {
