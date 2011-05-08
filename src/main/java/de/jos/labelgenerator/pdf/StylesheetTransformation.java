@@ -2,12 +2,12 @@ package de.jos.labelgenerator.pdf;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.transform.Transformer;
@@ -23,7 +23,7 @@ import de.jos.labelgenerator.template.TemplatingEngine;
 
 public class StylesheetTransformation {
 
-	private static final Logger logger = Logger.getLogger(PDFGenerator.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(StylesheetTransformation.class.getName());
 
 	private static final ClassLoader classLoader = StylesheetTransformation.class.getClassLoader();
 
@@ -31,21 +31,27 @@ public class StylesheetTransformation {
 
 	private static final String TEMPLATE_TO_MAKE_DYNAMIC = "layouts/odt/template.xml";
 
-	private File targetFile;
-
 	private TemplatingEngine templateEngine = new TemplatingEngine();
 
-	public StylesheetTransformation(final File targetFile) {
-		this.targetFile = targetFile;
+	public StylesheetTransformation() {
 	}
 
-	public boolean generate(Layout layout, List<ButtonLabel> buttonLabelList) throws Exception {
+	/**
+	 * Returns the generated updated content.xml file after the stylesheet
+	 * transformation. Returns null if an error occured.
+	 * 
+	 * @param layout
+	 * @param buttonLabelList
+	 * @return
+	 * @throws Exception
+	 */
+	public String generate(Layout layout, List<ButtonLabel> buttonLabelList) throws Exception {
+
+		LOGGER.log(Level.INFO, "Performing Stylesheet tranformation.");
 
 		// read the xslt file
 		final String originalStylesheet = readFileFromResourceInString(XSLT_FILENAME);
 		final String originalTemplate = readFileFromResourceInString(TEMPLATE_TO_MAKE_DYNAMIC);
-
-		System.out.println(originalStylesheet);
 
 		final TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
@@ -56,7 +62,6 @@ public class StylesheetTransformation {
 			// replace address, frameNumber, leadingBlanks
 			final String renderedXslt = templateEngine.renderXsltTempalte(tmpButtonLabel.getAddress(),
 					originalStylesheet, tmpButtonLabel.getIndex());
-			System.out.println("rendered xlst:" + renderedXslt);
 
 			final Transformer transformer = transformerFactory.newTransformer(new StreamSource(
 					new ByteArrayInputStream(renderedXslt.getBytes())));
@@ -70,7 +75,7 @@ public class StylesheetTransformation {
 
 		System.out.println(workingTemplate);
 
-		return false;
+		return workingTemplate;
 	}
 
 	/**
@@ -89,14 +94,16 @@ public class StylesheetTransformation {
 
 		buttonLabels.add(buttonLabel);
 
-		StylesheetTransformation transformation = new StylesheetTransformation(null);
+		StylesheetTransformation transformation = new StylesheetTransformation();
 		transformation.generate(null, buttonLabels);
 	}
 
 	/**
+	 * TODO move to file utils.
+	 * 
 	 * Read content from a file and put it into a String.
 	 * 
-	 * @param fileName 
+	 * @param fileName
 	 * @return
 	 * @throws IOException
 	 */
