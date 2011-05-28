@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -14,6 +13,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+
+import org.apache.commons.io.IOUtils;
 
 import de.jos.labelgenerator.components.button.ButtonLabel;
 import de.jos.labelgenerator.configuration.Layout;
@@ -109,17 +110,7 @@ public class StylesheetTransformation {
 	 */
 	private String readFileFromResourceInString(String fileName) throws IOException {
 		final InputStream inputStream = classLoader.getResourceAsStream(fileName);
-		final InputStreamReader reader = new InputStreamReader(inputStream);
-
-		// read content
-		final StringBuilder sb = new StringBuilder();
-		final char[] buffer = new char[1024];
-		int len = -1;
-		while ((len = reader.read(buffer)) != -1) {
-			sb.append(new String(buffer, 0, len));
-		}
-
-		return sb.toString();
+		return IOUtils.toString(inputStream);
 	}
 
 }
