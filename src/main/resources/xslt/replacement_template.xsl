@@ -4,9 +4,7 @@
 	version="1.0">
 
 	<xsl:strip-space elements="*" />
-	<!-- 
 	<xsl:output indention="no" />
-	 -->
 
 	<!-- copy everything that has no other pattern defined -->
 	<xsl:template match="* | @*">
