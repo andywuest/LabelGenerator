@@ -1,4 +1,8 @@
 
+# Requirements: Kubuntu
+
+sudo apt-get install dbus-java-bin
+
 # lokal starten
 mvn clean package exec:java
 

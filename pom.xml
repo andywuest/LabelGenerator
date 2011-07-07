@@ -39,6 +39,11 @@
 			<version>${forms-version}</version>
 		</dependency>
 		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit-version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.jgoodies</groupId>
 			<artifactId>looks</artifactId>
 			<version>${looks-version}</version>
@@ -112,6 +117,20 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-jdk14</artifactId>
 			<version>1.6.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.freedesktop.DBus</groupId>
+			<artifactId>dbus-java</artifactId>
+			<version>2.6</version>
+			<scope>system</scope>
+			<systemPath>/usr/share/java/dbus.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>cx.ath.matthew</groupId>
+			<artifactId>unixsocket-java</artifactId>
+			<version>0.5</version>
+			<scope>system</scope>
+			<systemPath>/usr/share/java/unix.jar</systemPath>
 		</dependency>
 	</dependencies>
 
@@ -187,6 +206,7 @@
 		<itext-version>5.0.4</itext-version>
 		<gdata-version>1.41.5</gdata-version>
 		<truezip-version>7.0-rc2</truezip-version>
+		<junit-version>4.8.2</junit-version>
 	</properties>
 
 </project>
