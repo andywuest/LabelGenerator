@@ -30,6 +30,9 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 public class Command {
 
 	private String mTag;
@@ -46,8 +49,7 @@ public class Command {
 		this(tag, command, parameters, Charset.forName("ISO-8859-1"));
 	}
 
-	public Command(String tag, String command, Object[] parameters,
-			Charset charset) {
+	public Command(String tag, String command, Object[] parameters, Charset charset) {
 		mTag = tag;
 		mCommand = command;
 		mParameters = parameters;
@@ -58,8 +60,7 @@ public class Command {
 		return mTag;
 	}
 
-	protected void writeToStream(ResponseInputStream in, OutputStream out)
-			throws ProtocolException, IOException {
+	protected void writeToStream(ResponseInputStream in, OutputStream out) throws ProtocolException, IOException {
 		Object arg;
 		out.write(mTag.getBytes("US-ASCII"));
 		out.write(' ');
@@ -101,15 +102,14 @@ public class Command {
 		out.flush();
 	}
 
-	private void writeCharArray(char[] cs, OutputStream out)
-			throws ProtocolException, IOException {
+	private void writeCharArray(char[] cs, OutputStream out) throws ProtocolException, IOException {
 		for (int i = 0; i < cs.length; ++i) {
 			out.write(cs[i]);
 		}
 	}
 
-	private void writeByteArray(byte[] bs, ResponseInputStream in,
-			OutputStream out) throws ProtocolException, IOException {
+	private void writeByteArray(byte[] bs, ResponseInputStream in, OutputStream out) throws ProtocolException,
+			IOException {
 		out.write('{');
 		out.write(Integer.toString(bs.length).getBytes(mCharset.name()));
 		out.write('}');
@@ -128,8 +128,8 @@ public class Command {
 		mLastWasLiteral = true;
 	}
 
-	private void writeStringArray(String[] strings, ResponseInputStream in,
-			OutputStream out) throws ProtocolException, IOException {
+	private void writeStringArray(String[] strings, ResponseInputStream in, OutputStream out) throws ProtocolException,
+			IOException {
 		out.write('(');
 		if (strings.length > 0) {
 			out.write(strings[0].getBytes(mCharset.name()));
@@ -142,8 +142,8 @@ public class Command {
 		mLastWasLiteral = false;
 	}
 
-	private void writeString(String sequence, ResponseInputStream in,
-			OutputStream out) throws ProtocolException, IOException {
+	private void writeString(String sequence, ResponseInputStream in, OutputStream out) throws ProtocolException,
+			IOException {
 		// check if the argument is 7-bit, " and \ safe
 		boolean plainSafe = true;
 		boolean quote = sequence.length() == 0;
@@ -182,6 +182,11 @@ public class Command {
 		} else {
 			writeByteArray(sequence.getBytes(mCharset.name()), in, out);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return new ReflectionToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).toString();
 	}
 
 }

@@ -46,8 +46,7 @@ public class Response {
 			// what kind of? (untagged)
 			if (matcher.group(2) != null) {
 				// test for resp-cond (OK/BAD/NO)
-				Matcher responseCode = mStatusResponsePattern.matcher(matcher
-						.group(5));
+				Matcher responseCode = mStatusResponsePattern.matcher(matcher.group(5));
 				if (responseCode.matches()) {
 					result.mResponseType = RESPONSE_STATUS;
 					result.mResponseSubType = responseCode.group(1);
@@ -68,8 +67,7 @@ public class Response {
 				}
 
 				// test for collection data
-				Matcher collectionData = mCollectionDataPattern.matcher(matcher
-						.group(5));
+				Matcher collectionData = mCollectionDataPattern.matcher(matcher.group(5));
 				if (collectionData.matches()) {
 					result.mResponseType = RESPONSE_COLLECTION_DATA;
 					result.mEntityId = Long.parseLong(collectionData.group(1));
@@ -95,8 +93,7 @@ public class Response {
 				}
 
 				// Not any of the above subtypes
-				throw new ProtocolException("Unknown subytpe : "
-						+ result.getSource());
+				throw new ProtocolException("Unknown subytpe : " + result.getSource());
 			}
 
 			// what kind of? (tagged)
@@ -104,8 +101,7 @@ public class Response {
 				result.mTag = matcher.group(3);
 
 				// test for resp-cond (OK/BAD/NO)
-				Matcher responseCode = mStatusResponsePattern.matcher(matcher
-						.group(5));
+				Matcher responseCode = mStatusResponsePattern.matcher(matcher.group(5));
 				if (responseCode.matches()) {
 					result.mResponseType = RESPONSE_STATUS;
 					result.mResponseSubType = responseCode.group(1);
@@ -125,16 +121,14 @@ public class Response {
 				}
 
 				// Not any of the above subtypes
-				throw new ProtocolException("Unknown subytpe :"
-						+ result.getSource());
+				throw new ProtocolException("Unknown subytpe :" + result.getSource());
 			}
 
 			// what kind of? (continuation)
 			if (matcher.group(4) != null) {
 				result.mResponseType = RESPONSE_CONTINUATION;
 
-				Matcher responseContinuation = mResponseContinuationPattern
-						.matcher(matcher.group(5));
+				Matcher responseContinuation = mResponseContinuationPattern.matcher(matcher.group(5));
 				if (responseContinuation.matches()) {
 					// do we have a responseCode?
 					if (responseContinuation.group(2) != null) {
@@ -142,8 +136,7 @@ public class Response {
 						// result.mResponseTextCode =
 						// ResponseTextCodeParser.parse(
 						// responseContinuation.group( 2 ) );
-						result.mResponseTextCode = responseContinuation
-								.group(2);
+						result.mResponseTextCode = responseContinuation.group(2);
 					}
 
 					// set reponse text
@@ -206,8 +199,7 @@ public class Response {
 		mLiteralMatcher.reset(mSource);
 
 		while (mLiteralMatcher.find()) {
-			mLiteralMatcher.appendReplacement(cleanedUp, getData(
-					mLiteralMatcher.group()).toString());
+			mLiteralMatcher.appendReplacement(cleanedUp, getData(mLiteralMatcher.group()).toString());
 		}
 
 		mLiteralMatcher.appendTail(cleanedUp);
@@ -271,43 +263,50 @@ public class Response {
 	// Pattern to classify the response in tagged/untagged/continuation
 	// and to access the text of the reponse without the trailing CRLF
 	private static final Pattern mResponsePattern = Pattern.compile("^((\\*)" + // group
-																				// 2
-																				// is
-																				// untagged
+			// 2
+			// is
+			// untagged
 			"|([0-9a-zA-Z]+)" + // group 3 is the tag
 			"|(\\+)) " + // group 4 is continuation
 			"([^\r\n]*)\r?\n?"); // group 5 is the rest of the response without
-									// a optional CRLF
+	// a optional CRLF
 
 	// Pattern to classify a status reponse.
-	private static final Pattern mStatusResponsePattern = Pattern
-			.compile("^(OK|BAD|NO) " + // group 1 is the status type
-					"(\\[(\\w+[^\\]]+)\\])?" + // group 3 is an optional text
-												// code
-					" ?([^\r\n]*)"); // group 4 is the message
+	private static final Pattern mStatusResponsePattern = Pattern.compile("^(OK|BAD|NO) " + // group
+																							// 1
+																							// is
+																							// the
+																							// status
+																							// type
+			"(\\[(\\w+[^\\]]+)\\])?" + // group 3 is an optional text
+			// code
+			" ?([^\r\n]*)"); // group 4 is the message
 
 	// Pattern to classify a collection data response.
-	private static final Pattern mCollectionDataPattern = Pattern
-			.compile("^(\\d+)" + // group1 contains the collection id
-					" (\\d+)" + // group2 contains the collection parent id
-					" ?([^\r\n]*)"); // group3 contains the data
+	private static final Pattern mCollectionDataPattern = Pattern.compile("^(\\d+)" + // group1
+																						// contains
+																						// the
+																						// collection
+																						// id
+			" (\\d+)" + // group2 contains the collection parent id
+			" ?([^\r\n]*)"); // group3 contains the data
 
 	// Pattern to classify a message data response.
 	private static final Pattern mItemDataPattern = Pattern.compile("^(\\d+) " + // group1
-																					// contains
-																					// the
-																					// item
-																					// id
+			// contains
+			// the
+			// item
+			// id
 			"(EXPUNGE|FETCH)" + // group2 contains the command
 			" ?([^\r\n]*)"); // group3 contains the data
 
 	// Pattern to classify a continuation response.
-	private static final Pattern mResponseContinuationPattern = Pattern
-			.compile("^(\\[(\\w+[^\\]]+)\\] )?" + // group2 contains optional
-													// text code
-					"([^\r\n]*)"); // group3 contains the message
+	private static final Pattern mResponseContinuationPattern = Pattern.compile("^(\\[(\\w+[^\\]]+)\\] )?" + // group2
+																												// contains
+																												// optional
+			// text code
+			"([^\r\n]*)"); // group3 contains the message
 
-	private static final Pattern mLiteralPattern = Pattern
-			.compile("^\\{(\\d+)\\}$");
+	private static final Pattern mLiteralPattern = Pattern.compile("^\\{(\\d+)\\}$");
 	private static final Matcher mLiteralMatcher = mLiteralPattern.matcher("");
 }

@@ -19,23 +19,20 @@
 
 package org.akonadiproject.akonadi;
 
-import org.akonadiproject.akonadi.Collection;
-import org.akonadiproject.akonadi.CollectionFetchJob;
-import org.akonadiproject.akonadi.Item;
-import org.akonadiproject.akonadi.ItemFetchJob;
-import org.akonadiproject.akonadi.Session;
-
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Walk {
+
+	private static final Logger LOGGER = Logger.getLogger(Walk.class.getName());
+
 	public Walk() {
 	}
 
-	public void walkSubTree(Collection collection, String prefix)
-			throws Exception {
-		CollectionFetchJob job = new CollectionFetchJob(collection,
-				CollectionFetchJob.Mode.FirstLevel);
+	public void walkSubTree(Collection collection, String prefix) throws Exception {
+		CollectionFetchJob job = new CollectionFetchJob(collection, CollectionFetchJob.Mode.FirstLevel);
 
 		job.run();
 
@@ -66,8 +63,9 @@ public class Walk {
 		walk.walkSubTree(Collection.ROOT, "");
 	}
 
-	private void walkItems(Collection collection, String prefix)
-			throws Exception {
+	private void walkItems(Collection collection, String prefix) throws Exception {
+		LOGGER.log(Level.INFO, "walk Items");
+
 		ItemFetchJob job = new ItemFetchJob(collection);
 		job.run();
 
@@ -78,6 +76,7 @@ public class Walk {
 		if (items != null) {
 			Iterator<Item> it = items.iterator();
 			while (it.hasNext()) {
+				LOGGER.log(Level.INFO, "next item !");
 				printItem(it.next(), prefix);
 			}
 		}
@@ -86,8 +85,7 @@ public class Walk {
 	private void printCollection(Collection collection, String prefix) {
 		String name = collection.getName();
 		try {
-			EntityDisplayAttribute attribute = collection
-					.getOrCreateAttribute(EntityDisplayAttribute.class);
+			EntityDisplayAttribute attribute = collection.getOrCreateAttribute(EntityDisplayAttribute.class);
 			if (attribute.getDisplayName() != null) {
 				name = attribute.getDisplayName();
 			}
@@ -96,19 +94,17 @@ public class Walk {
 		}
 
 		System.out.println(prefix + name);
-		System.out.println(prefix + "    " + collection.getId() + " ("
-				+ collection.getRemoteId() + ")");
+		System.out.println(prefix + "    " + collection.getId() + " (" + collection.getRemoteId() + ")");
 
 		String[] mimeTypes = collection.getContentMimeTypes();
 		if (mimeTypes != null) {
 			for (int index = 0; index < mimeTypes.length; ++index) {
-				System.out.println(prefix + "    " + mimeTypes[index]);
+				System.out.println(prefix + "x   " + mimeTypes[index]);
 			}
 		}
 	}
 
 	private void printItem(Item item, String prefix) {
-		System.out.println(prefix + item.getId() + " (" + item.getRemoteId()
-				+ ") " + item.getMimeType());
+		System.out.println(prefix + item.getId() + " (" + item.getRemoteId() + ") " + item.getMimeType());
 	}
 }

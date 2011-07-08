@@ -22,14 +22,24 @@ package org.akonadiproject.akonadi;
 import java.io.IOException;
 
 public class Session {
+
+	private String mSessionId;
+	private DataConnection mConnection;
+
+	private long mTagCounter;
+
+	private CommandOutputStream mOutputStream;
+	private ResponseInputStream mInputStream;
+
+	private static Session mDefaultSession;
+
 	public Session(String sessionId) throws IOException, ProtocolException {
 		mSessionId = sessionId;
 
 		mConnection = new DataConnection();
 
 		mInputStream = new ResponseInputStream(mConnection.getInputStream());
-		mOutputStream = new CommandOutputStream(mConnection.getOutputStream(),
-				mInputStream);
+		mOutputStream = new CommandOutputStream(mConnection.getOutputStream(), mInputStream);
 
 		login();
 	}
@@ -46,8 +56,7 @@ public class Session {
 		return mInputStream;
 	}
 
-	public static void createDefaultSession(String sessionId)
-			throws IOException, ProtocolException {
+	public static void createDefaultSession(String sessionId) throws IOException, ProtocolException {
 		// TODO: exception when mDefaultSession != null?
 
 		mDefaultSession = new Session(sessionId);
@@ -62,8 +71,7 @@ public class Session {
 		if (!response.isOK())
 			throw new ProtocolException(response);
 
-		Command command = new Command(getNextTag(), "LOGIN",
-				new Object[] { mSessionId });
+		Command command = new Command(getNextTag(), "LOGIN", new Object[] { mSessionId });
 		mOutputStream.writeCommand(command);
 
 		response = mInputStream.readResponse();
@@ -72,13 +80,4 @@ public class Session {
 			throw new ProtocolException(response);
 	}
 
-	private String mSessionId;
-	private DataConnection mConnection;
-
-	private long mTagCounter;
-
-	private CommandOutputStream mOutputStream;
-	private ResponseInputStream mInputStream;
-
-	private static Session mDefaultSession;
 }

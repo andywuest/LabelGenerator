@@ -20,6 +20,12 @@
 package org.akonadiproject.akonadi;
 
 public class ProtocolException extends Exception {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public ProtocolException(String message) {
 		super(message);
 	}
@@ -34,8 +40,7 @@ public class ProtocolException extends Exception {
 
 	public String toString() {
 		if (mResponse != null) {
-			return "org.akonadiproject.akonadi.ProtocolException: "
-					+ mResponse.getResponseMessage();
+			return "org.akonadiproject.akonadi.ProtocolException: " + mResponse.getResponseMessage();
 		}
 
 		return super.toString();

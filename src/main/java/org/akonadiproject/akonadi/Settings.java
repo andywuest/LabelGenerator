@@ -27,6 +27,9 @@ import java.util.Map;
 
 public class Settings {
 
+	private File mFile = null;
+	private Map<String, String> mValues;
+
 	public Settings(String path) {
 		this(new File(path));
 	}
@@ -60,8 +63,7 @@ public class Settings {
 		String group = null;
 		String[] pair = null;
 
-		for (String line = lineReader.readLine(); line != null; line = lineReader
-				.readLine()) {
+		for (String line = lineReader.readLine(); line != null; line = lineReader.readLine()) {
 			if (line.length() == 0)
 				continue;
 
@@ -108,6 +110,4 @@ public class Settings {
 		return true;
 	}
 
-	private File mFile = null;
-	private Map<String, String> mValues;
 }

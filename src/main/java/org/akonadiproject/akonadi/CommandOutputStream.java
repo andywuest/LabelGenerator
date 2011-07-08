@@ -22,18 +22,23 @@ package org.akonadiproject.akonadi;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CommandOutputStream extends FilterOutputStream {
-	CommandOutputStream(OutputStream parentStream,
-			ResponseInputStream responseStream) {
+
+	private static final Logger LOGGER = Logger.getLogger(CommandOutputStream.class.getName());
+
+	private ResponseInputStream mResponseStream;
+
+	CommandOutputStream(OutputStream parentStream, ResponseInputStream responseStream) {
 		super(parentStream);
 		mResponseStream = responseStream;
 	}
 
-	public void writeCommand(Command command) throws ProtocolException,
-			IOException {
+	public void writeCommand(Command command) throws ProtocolException, IOException {
+		LOGGER.log(Level.INFO, command.toString());
 		command.writeToStream(mResponseStream, out);
 	}
 
-	private ResponseInputStream mResponseStream;
 }

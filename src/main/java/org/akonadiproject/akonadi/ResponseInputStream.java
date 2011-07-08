@@ -31,10 +31,12 @@ import java.nio.CharBuffer;
 import java.util.regex.Matcher;
 
 public class ResponseInputStream extends FilterInputStream {
+
+	private StringBuilder mLineBuffer;
+
 	public ResponseInputStream(InputStream parentStream) {
 		super(parentStream);
-
-		mLineBuffer = new StringBuffer();
+		mLineBuffer = new StringBuilder();
 	}
 
 	public Response readResponse() throws IOException, ProtocolException {
@@ -45,8 +47,7 @@ public class ResponseInputStream extends FilterInputStream {
 		return result;
 	}
 
-	private void parseResponseMessage(Response response)
-			throws ProtocolException, IOException {
+	private void parseResponseMessage(Response response) throws ProtocolException, IOException {
 		// is there a literal in the answer
 		Matcher literalMatcher = response.literalMatcher();
 		literalMatcher.reset(response.mResponseMessage);
@@ -56,9 +57,8 @@ public class ResponseInputStream extends FilterInputStream {
 			int literalSize = Integer.parseInt(literalMatcher.group(1));
 
 			// Cleanup literals to make the {N} to increase for every literal
-			response.mResponseMessage = response.mResponseMessage.substring(0,
-					literalMatcher.start())
-					+ '{' + (literalIndex++) + '}';
+			response.mResponseMessage = response.mResponseMessage.substring(0, literalMatcher.start()) + '{'
+					+ (literalIndex++) + '}';
 
 			// assign literal to response
 			response.addLiteral(readLiteral(literalSize));
@@ -105,5 +105,4 @@ public class ResponseInputStream extends FilterInputStream {
 		return buffer;
 	}
 
-	private StringBuffer mLineBuffer;
 }

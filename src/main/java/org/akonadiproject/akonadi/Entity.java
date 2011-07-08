@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Entity {
+
 	public void setRemoteId(String remoteId) {
 		mRemoteId = remoteId;
 	}
@@ -80,8 +81,8 @@ public class Entity {
 		return null;
 	}
 
-	public <T extends Attribute> T getOrCreateAttribute(Class classT)
-			throws InstantiationException, IllegalAccessException {
+	public <T extends Attribute> T getOrCreateAttribute(Class classT) throws InstantiationException,
+			IllegalAccessException {
 		T t = (T) classT.newInstance();
 
 		if (hasAttribute(t.getType())) {
