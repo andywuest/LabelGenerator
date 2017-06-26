@@ -203,7 +203,7 @@
 		<commons-io-version>2.0.1</commons-io-version>
 		<cardme-version>0.2.6</cardme-version>
 		<freemarker-version>2.3.14</freemarker-version>
-		<itext-version>5.0.4</itext-version>
+		<itext-version>5.0.5</itext-version>
 		<gdata-version>1.41.5</gdata-version>
 		<truezip-version>7.0-rc2</truezip-version>
 		<junit-version>4.8.2</junit-version>
